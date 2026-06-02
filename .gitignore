@@ -1,0 +1,14 @@
+# Backend
+backend/node_modules/
+backend/.env
+backend/uploads/
+
+# Admin Panel
+admin_panel/node_modules/
+admin_panel/dist/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+*.log

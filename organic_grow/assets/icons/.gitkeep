@@ -1,0 +1,1 @@
+# Keep folder present on disk to prevent Flutter build asset validation failures

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RiFresh INDIA - Vendor Hub</title>
+  <!-- Google Fonts - Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="app">
+    
+    <!-- 1. Landing Screen -->
+    <div id="landing-screen" class="screen active">
+      <div class="landing-card card glassmorphic">
+        <div class="logo-container">
+          <img src="/uploads/users.js" alt="Logo" class="app-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3062/3062634.png'">
+          <h1>RiFresh INDIA</h1>
+          <p class="tagline">Hyperlocal Multi-Vendor Farm Marketplace</p>
+        </div>
+        <div class="landing-actions">
+          <button onclick="showScreen('login-screen')" class="btn btn-primary btn-glow">
+            <i data-lucide="log-in"></i> Sign In to Dashboard
+          </button>
+          <button onclick="showScreen('register-screen')" class="btn btn-secondary">
+            <i data-lucide="store"></i> Register as Vendor
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Login Screen -->
+    <div id="login-screen" class="screen">
+      <div class="auth-card card glassmorphic">
+        <button class="back-btn" onclick="showScreen('landing-screen')">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Enter your registered phone number to receive your OTP</p>
+        
+        <form id="login-form" onsubmit="handleSendOTP(event)">
+          <div class="form-group">
+            <label for="login-phone">Phone Number</label>
+            <div class="input-with-icon">
+              <i data-lucide="phone"></i>
+              <input type="tel" id="login-phone" placeholder="9876543210" required maxlength="10">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Send Verification Code</button>
+        </form>
+
+        <form id="otp-form" onsubmit="handleVerifyOTP(event)" class="hidden">
+          <div class="form-group">
+            <label for="login-otp">Enter 4-Digit OTP</label>
+            <div class="otp-inputs">
+              <input type="text" id="otp-1" maxlength="1" class="otp-box" required onkeyup="moveFocus(this, 'otp-2')">
+              <input type="text" id="otp-2" maxlength="1" class="otp-box" required onkeyup="moveFocus(this, 'otp-3')">
+              <input type="text" id="otp-3" maxlength="1" class="otp-box" required onkeyup="moveFocus(this, 'otp-4')">
+              <input type="text" id="otp-4" maxlength="1" class="otp-box" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Verify & Continue</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 3. Register & Onboard Screen -->
+    <div id="register-screen" class="screen">
+      <div class="onboard-container card glassmorphic">
+        <button class="back-btn" onclick="showScreen('landing-screen')">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h2>Vendor Registration</h2>
+        <p class="subtitle">Create your hyper-local store and start selling directly to consumers</p>
+        
+        <!-- Step 1: Account Registration -->
+        <div id="register-step-1">
+          <form onsubmit="handleRegisterStep1(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Your Full Name</label>
+                <div class="input-with-icon">
+                  <i data-lucide="user"></i>
+                  <input type="text" id="reg-name" placeholder="Ramesh Farmer" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <div class="input-with-icon">
+                  <i data-lucide="mail"></i>
+                  <input type="email" id="reg-email" placeholder="ramesh@gmail.com" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Phone Number</label>
+                <div class="input-with-icon">
+                  <i data-lucide="phone"></i>
+                  <input type="tel" id="reg-phone" placeholder="9876543210" required maxlength="10">
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mt-4">Generate Registration OTP</button>
+          </form>
+        </div>
+
+        <!-- Step 2: Register OTP Verification -->
+        <div id="register-step-otp" class="hidden">
+          <form onsubmit="handleRegisterVerifyOTP(event)">
+            <div class="form-group">
+              <label>Enter 4-Digit OTP sent to your phone</label>
+              <div class="otp-inputs">
+                <input type="text" id="reg-otp-1" maxlength="1" class="otp-box" required onkeyup="moveFocus(this, 'reg-otp-2')">
+                <input type="text" id="reg-otp-2" maxlength="1" class="otp-box" required onkeyup="moveFocus(this, 'reg-otp-3')">
+                <input type="text" id="reg-otp-3" maxlength="1" class="otp-box" required onkeyup="moveFocus(this, 'reg-otp-4')">
+                <input type="text" id="reg-otp-4" maxlength="1" class="otp-box" required>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Verify OTP</button>
+          </form>
+        </div>
+
+        <!-- Step 3: Store Profile Onboarding Details -->
+        <div id="register-step-2" class="hidden">
+          <form onsubmit="handleOnboardStore(event)">
+            <h3 class="step-title"><i data-lucide="store"></i> Store Profile & Operations</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Shop / Farm Name</label>
+                <input type="text" id="store-name" placeholder="e.g. RiFresh Mushroom Farm" required>
+              </div>
+              <div class="form-group">
+                <label>Owner Name</label>
+                <input type="text" id="store-owner" placeholder="e.g. Ramesh Kumar" required>
+              </div>
+              <div class="form-group col-span-2">
+                <label>Store Description</label>
+                <textarea id="store-desc" placeholder="Describe your farm, fresh produce, and values..." rows="3" required></textarea>
+              </div>
+              <div class="form-group">
+                <label>Estimated Delivery Time (mins)</label>
+                <input type="text" id="store-delivery-time" placeholder="e.g. 25-30 mins" required>
+              </div>
+              <div class="form-group">
+                <label>Minimum Order Amount (₹)</label>
+                <input type="number" id="store-min-order" placeholder="e.g. 99" required min="0">
+              </div>
+              <div class="form-group">
+                <label>Cuisine Tags (Comma separated)</label>
+                <input type="text" id="store-tags" placeholder="e.g. Organic, Mushrooms, Fresh Vegetables">
+              </div>
+            </div>
+
+            <h3 class="step-title mt-4"><i data-lucide="map-pin"></i> Location & Address</h3>
+            <div class="form-grid">
+              <div class="form-group col-span-2">
+                <label>Full Address</label>
+                <input type="text" id="store-address" placeholder="Plot 42, Farm Road, Patia" required>
+              </div>
+              <div class="form-group">
+                <label>City</label>
+                <input type="text" id="store-city" placeholder="Bhubaneswar" required>
+              </div>
+              <div class="form-group">
+                <label>State</label>
+                <input type="text" id="store-state" placeholder="Odisha" required>
+              </div>
+              <div class="form-group">
+                <label>Pincode</label>
+                <input type="text" id="store-pincode" placeholder="751024" required maxlength="6">
+              </div>
+              <div class="form-group col-span-2">
+                <label>Geographic Coordinates (Click button to auto-detect location)</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                  <input type="number" step="any" id="store-lat" placeholder="Latitude (e.g. 20.34)" style="flex:1;" required>
+                  <input type="number" step="any" id="store-lng" placeholder="Longitude (e.g. 85.81)" style="flex:1;" required>
+                  <button type="button" class="btn btn-secondary" onclick="fetchLiveCoordinates('store-lat', 'store-lng')" style="padding:0 20px; white-space: nowrap;">
+                    <i data-lucide="map-pin"></i> Auto Detect
+                  </button>
+                </div>
+              </div>
+              <div class="form-group col-span-2">
+                <label>Delivery/Service Radius Boundary (km)</label>
+                <input type="number" id="store-service-radius" placeholder="Boundary in kilometers (e.g. 10)" required min="1" value="10">
+              </div>
+              <div class="form-group">
+                <label>Upload Shop Image / Banner</label>
+                <div class="file-upload">
+                  <input type="file" id="store-image" accept="image/*" required>
+                  <label for="store-image" class="file-label">
+                    <i data-lucide="image"></i> Choose Shop Image
+                  </label>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mt-4">Submit Store Profile & Open Shop</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Dashboard Screen (Authed Layout) -->
+    <div id="dashboard-screen" class="screen full-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar glassmorphic">
+        <div class="sidebar-header">
+          <i data-lucide="store" class="text-primary icon-large"></i>
+          <div>
+            <h2 id="side-shop-name">Loading...</h2>
+            <span class="badge badge-success">Approved</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-item active" onclick="switchTab('dashboard-tab', this)">
+            <i data-lucide="layout-dashboard"></i> Overview
+          </a>
+          <a href="#" class="nav-item" onclick="switchTab('products-tab', this)">
+            <i data-lucide="shopping-basket"></i> Products
+          </a>
+          <a href="#" class="nav-item" onclick="switchTab('orders-tab', this)">
+            <i data-lucide="receipt"></i> Orders
+            <span class="badge badge-danger hidden" id="pending-orders-count">0</span>
+          </a>
+          <a href="#" class="nav-item" onclick="switchTab('profile-tab', this)">
+            <i data-lucide="settings"></i> Profile Settings
+          </a>
+        </nav>
+        <div class="sidebar-footer">
+          <button onclick="handleLogout()" class="btn btn-secondary w-100 text-danger">
+            <i data-lucide="log-out"></i> Logout
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="content-container">
+        <!-- Top Navigation -->
+        <header class="top-nav glassmorphic">
+          <div class="header-left">
+            <h1 id="tab-title">Dashboard Overview</h1>
+          </div>
+          <div class="header-right">
+            <!-- Shop Open Switch -->
+            <div class="shop-status-switch">
+              <span id="shop-status-label" class="status-open">Shop is Open</span>
+              <label class="switch">
+                <input type="checkbox" id="shop-toggle" onchange="toggleShopStatus()">
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="profile-info">
+              <div class="user-avatar" id="header-avatar">R</div>
+              <span class="user-name" id="header-owner-name">Owner</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Tab contents -->
+        <div class="tab-content-container">
+          
+          <!-- TAB 1: OVERVIEW -->
+          <div id="dashboard-tab" class="tab-view active">
+            <!-- Stat Cards -->
+            <div class="stats-grid">
+              <div class="stat-card card hover-scale">
+                <div class="stat-icon bg-green-light text-green">
+                  <i data-lucide="banknote"></i>
+                </div>
+                <div class="stat-details">
+                  <h3>Total Earnings</h3>
+                  <p class="stat-val" id="stat-earnings">₹0.00</p>
+                </div>
+              </div>
+              <div class="stat-card card hover-scale">
+                <div class="stat-icon bg-blue-light text-blue">
+                  <i data-lucide="shopping-cart"></i>
+                </div>
+                <div class="stat-details">
+                  <h3>Total Orders</h3>
+                  <p class="stat-val" id="stat-orders">0</p>
+                </div>
+              </div>
+              <div class="stat-card card hover-scale">
+                <div class="stat-icon bg-orange-light text-orange">
+                  <i data-lucide="truck"></i>
+                </div>
+                <div class="stat-details">
+                  <h3>Active Orders</h3>
+                  <p class="stat-val" id="stat-active-orders">0</p>
+                </div>
+              </div>
+              <div class="stat-card card hover-scale">
+                <div class="stat-icon bg-purple-light text-purple">
+                  <i data-lucide="package"></i>
+                </div>
+                <div class="stat-details">
+                  <h3>Total Products</h3>
+                  <p class="stat-val" id="stat-products">0</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dashboard lists -->
+            <div class="dashboard-sections">
+              <!-- Recent Orders -->
+              <div class="card col-span-2">
+                <div class="card-header">
+                  <h2>Recent Pending Orders</h2>
+                  <button class="btn btn-secondary btn-sm" onclick="switchTab('orders-tab', document.querySelector('[data-lucide=receipt]').parentElement)">View All</button>
+                </div>
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="recent-orders-list">
+                      <tr>
+                        <td colspan="5" class="text-center">No pending orders.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: PRODUCTS -->
+          <div id="products-tab" class="tab-view">
+            <div class="tab-actions">
+              <div class="search-box">
+                <i data-lucide="search"></i>
+                <input type="text" placeholder="Search products..." oninput="filterProducts(this.value)">
+              </div>
+              <button class="btn btn-primary" onclick="openAddProductModal()">
+                <i data-lucide="plus"></i> Add New Product
+              </button>
+            </div>
+            
+            <div class="products-grid" id="vendor-products-grid">
+              <!-- Product Cards go here -->
+            </div>
+          </div>
+
+          <!-- TAB 3: ORDERS -->
+          <div id="orders-tab" class="tab-view">
+            <div class="tab-actions">
+              <div class="filter-tabs">
+                <button class="filter-btn active" onclick="filterOrders('all', this)">All</button>
+                <button class="filter-btn" onclick="filterOrders('pending', this)">Pending</button>
+                <button class="filter-btn" onclick="filterOrders('accepted', this)">Accepted</button>
+                <button class="filter-btn" onclick="filterOrders('packed', this)">Packed</button>
+                <button class="filter-btn" onclick="filterOrders('ready_for_pickup', this)">Ready 🛵</button>
+                <button class="filter-btn" onclick="filterOrders('out_for_delivery', this)">On the Way</button>
+                <button class="filter-btn" onclick="filterOrders('delivered', this)">Delivered</button>
+                <button class="filter-btn" onclick="filterOrders('cancelled', this)">Cancelled</button>
+              </div>
+            </div>
+
+            <div class="orders-list" id="vendor-orders-list">
+              <!-- Order cards go here -->
+            </div>
+          </div>
+
+          <!-- TAB 4: PROFILE SETTINGS -->
+          <div id="profile-tab" class="tab-view">
+            <div class="card max-w-600">
+              <h2>Edit Store Profile</h2>
+              <p class="subtitle mb-4">Keep your operational parameters and location updated</p>
+              
+              <form id="edit-profile-form" onsubmit="handleUpdateProfile(event)">
+                <div class="form-grid">
+                  <div class="form-group col-span-2">
+                    <label>Store Name</label>
+                    <input type="text" id="prof-store-name" required>
+                  </div>
+                  <div class="form-group col-span-2">
+                    <label>Description</label>
+                    <textarea id="prof-store-desc" rows="3" required></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label>Delivery Time</label>
+                    <input type="text" id="prof-delivery-time" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Minimum Order Amount (₹)</label>
+                    <input type="number" id="prof-min-order" required min="0">
+                  </div>
+                  <div class="form-group">
+                    <label>Cuisine / Category Tags (Comma separated)</label>
+                    <input type="text" id="prof-tags">
+                  </div>
+                  <div class="form-group col-span-2">
+                    <label>Geographic Coordinates (For Delivery distance calculations)</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                      <input type="number" step="any" id="prof-lat" placeholder="Latitude" style="flex:1;" required>
+                      <input type="number" step="any" id="prof-lng" placeholder="Longitude" style="flex:1;" required>
+                      <button type="button" class="btn btn-secondary" onclick="fetchLiveCoordinates('prof-lat', 'prof-lng')" style="padding:0 20px; white-space: nowrap;">
+                        <i data-lucide="map-pin"></i> Detect
+                      </button>
+                    </div>
+                  </div>
+                  <div class="form-group col-span-2">
+                    <label>Delivery/Service Radius Boundary (km)</label>
+                    <input type="number" id="prof-service-radius" required min="1">
+                  </div>
+                  <div class="form-group col-span-2">
+                    <label>Store Banner / Image</label>
+                    <div class="file-upload">
+                      <input type="file" id="prof-image" accept="image/*">
+                      <label for="prof-image" class="file-label">
+                        <i data-lucide="image"></i> Change Banner Image
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-4 w-100">Update Profile</button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <!-- Product CRUD Modal -->
+    <div id="product-modal" class="modal">
+      <div class="modal-content card glassmorphic">
+        <span class="close-modal" onclick="closeProductModal()">&times;</span>
+        <h2 id="modal-title">Add New Product</h2>
+        <form id="product-form" onsubmit="handleSubmitProduct(event)">
+          <input type="hidden" id="prod-id">
+          <div class="form-grid">
+            <div class="form-group col-span-2">
+              <label for="prod-name">Product Name</label>
+              <input type="text" id="prod-name" required placeholder="e.g. Fresh White Button Mushrooms">
+            </div>
+            <div class="form-group">
+              <label for="prod-category">Category</label>
+              <select id="prod-category" required>
+                <!-- Filled dynamically -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="prod-unit">Unit</label>
+              <select id="prod-unit" required>
+                <option value="kg">kilogram (kg)</option>
+                <option value="g">gram (g)</option>
+                <option value="packet">packet</option>
+                <option value="pc">piece (pc)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="prod-weight">Weight (e.g. 500g or 1 kg)</label>
+              <input type="text" id="prod-weight" required placeholder="e.g. 200g">
+            </div>
+            <div class="form-group">
+              <label for="prod-mrp">MRP Price (₹)</label>
+              <input type="number" id="prod-mrp" required placeholder="e.g. 150" min="0">
+            </div>
+            <div class="form-group">
+              <label for="prod-price">Selling Price (₹)</label>
+              <input type="number" id="prod-price" required placeholder="e.g. 120" min="0">
+            </div>
+            <div class="form-group">
+              <label for="prod-stock">Stock / Quantity</label>
+              <input type="number" id="prod-stock" required placeholder="e.g. 50" min="0">
+            </div>
+            <div class="form-group col-span-2">
+              <label for="prod-desc">Product Description</label>
+              <textarea id="prod-desc" placeholder="Nutritional values, freshness, storage tips..." rows="3" required></textarea>
+            </div>
+            <div class="form-group col-span-2">
+              <label>Product Images (Max 5)</label>
+              <div class="file-upload">
+                <input type="file" id="prod-images" accept="image/*" multiple onchange="handleProductImagePreviews(this)">
+                <label for="prod-images" class="file-label">
+                  <i data-lucide="upload"></i> Upload Images
+                </label>
+              </div>
+              <div id="product-images-preview" style="display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; padding: 5px 0;"></div>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btn-save-product">Save Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

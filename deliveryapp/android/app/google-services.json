@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "916202465947",
+    "project_id": "rifresh",
+    "storage_bucket": "rifresh.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916202465947:android:2a0f2936e73cc5078af43e",
+        "android_client_info": {
+          "package_name": "com.rds.rifreshapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAocE9zIo2R-8ziKO-zRrH7Rw0O_A2IF14"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916202465947:android:b815c9a823e53e178af43e",
+        "android_client_info": {
+          "package_name": "com.rds.rifreshdelivery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAocE9zIo2R-8ziKO-zRrH7Rw0O_A2IF14"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
